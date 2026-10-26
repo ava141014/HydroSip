@@ -602,5 +602,165 @@
 
   console.log("HydroSip Firebase initialized!");
 </script>
+
+  
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+  import {
+    getAuth,
+    signInWithEmailAndPassword,
+    onAuthStateChanged,
+    signOut
+  } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+  import {
+    getDatabase,
+    ref,
+    query,
+    limitToLast,
+    onChildAdded
+  } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-database.js";
+
+  // Your existing HydroSip Firebase project
+  const firebaseConfig = {
+    apiKey: "AIzaSyABRvO1V5qJ5TvDbCckq_2pXd-Zb9XTOc4",
+    authDomain: "hydrosip-20853.firebaseapp.com",
+    databaseURL: "https://hydrosip-20853-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "hydrosip-20853",
+    storageBucket: "hydrosip-20853.firebasestorage.app",
+    messagingSenderId: "768224688643",
+    appId: "1:768224688643:web:8430e9522d818f54522c36"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const database = getDatabase(app);
+
+  // Add a live Firebase records panel without replacing your dashboard
+  document.body.insertAdjacentHTML("afterbegin", `
+    <section id="firebase-panel"
+      style="margin:16px auto;padding:18px;max-width:900px;
+      border:2px solid #9bdcf5;border-radius:16px;
+      font-family:Arial,sans-serif;background:#f4fbff;color:#16324f">
+      <h2>💧 HydroSip Live Records</h2>
+      <p id="firebase-status">Please sign in to view records.</p>
+
+      <form id="firebase-login">
+        <p>
+          <label>Email<br>
+            <input id="firebase-email" type="email" required
+              autocomplete="username" style="padding:9px;width:min(95%,320px)">
+          </label>
+        </p>
+        <p>
+          <label>Password<br>
+            <input id="firebase-password" type="password" required
+              autocomplete="current-password"
+              style="padding:9px;width:min(95%,320px)">
+          </label>
+        </p>
+        <button type="submit" style="padding:10px 16px">
+          Sign in
+        </button>
+        <p id="firebase-error" role="alert"></p>
+      </form>
+
+      <div id="firebase-records" aria-live="polite"></div>
+      <button id="firebase-logout" type="button" hidden>
+        Sign out
+      </button>
+    </section>
+  `);
+
+  const loginForm = document.getElementById("firebase-login");
+  const statusText = document.getElementById("firebase-status");
+  const errorText = document.getElementById("firebase-error");
+  const records = document.getElementById("firebase-records");
+  const logoutButton = document.getElementById("firebase-logout");
+  let stopListening = null;
+
+  loginForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    errorText.textContent = "";
+    statusText.textContent = "Signing in...";
+
+    const email = document.getElementById("firebase-email").value.trim();
+    const password = document.getElementById("firebase-password").value;
+
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      loginForm.reset();
+    } catch (error) {
+      statusText.textContent = "Sign-in failed.";
+      errorText.textContent =
+        error.code === "auth/invalid-credential"
+          ? "Email or password is incorrect."
+          : error.message;
+    }
+  });
+
+  logoutButton.addEventListener("click", () => signOut(auth));
+
+  onAuthStateChanged(auth, (user) => {
+    if (stopListening) {
+      stopListening();
+      stopListening = null;
+    }
+
+    records.replaceChildren();
+    loginForm.hidden = !!user;
+    logoutButton.hidden = !user;
+
+    if (!user) {
+      statusText.textContent = "Please sign in to view records.";
+      return;
+    }
+
+    statusText.textContent = "Signed in. Waiting for Firebase records...";
+
+    const recentEvents = query(ref(database, "events"), limitToLast(50));
+
+    stopListening = onChildAdded(
+      recentEvents,
+      (snapshot) => {
+        const data = snapshot.val() || {};
+        const item = document.createElement("article");
+        item.style.cssText =
+          "padding:12px;margin:10px 0;background:white;" +
+          "border:1px solid #cde7f5;border-radius:10px";
+
+        const title = document.createElement("strong");
+        title.textContent = String(
+          data.event || data.type || "Hydration event"
+        );
+
+        const details = document.createElement("p");
+        details.textContent =
+          "Student: " + String(data.student || "Not specified");
+
+        const time = document.createElement("small");
+        const parsedDate = data.timestamp
+          ? new Date(data.timestamp)
+          : null;
+
+        time.textContent =
+          "Time: " +
+          (parsedDate && !Number.isNaN(parsedDate.getTime())
+            ? parsedDate.toLocaleString()
+            : "Not provided");
+
+        item.append(title, details, time);
+        records.prepend(item);
+        statusText.textContent = "Connected — showing recent records.";
+      },
+      (error) => {
+        statusText.textContent =
+          "Could not read records: " + error.message;
+      }
+    );
+  });
+
+  console.log("HydroSip Firebase records panel loaded.");
+</script>
+
 </body>
 </html>
