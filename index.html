@@ -1,11 +1,11 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>HydroApp 💧 - Smart Water Bottle Tracker</title>
+  <title>HydroApp 💧 - Classroom Hydration Hub</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
   <style>
     body { font-family: 'Quicksand', sans-serif; background-color: #f0fdfa; }
@@ -13,57 +13,77 @@
     .sparkle-bg {
       background-image: radial-gradient(#99f6e4 1.5px, transparent 1.5px), radial-gradient(#cbd5e1 1.5px, #f0fdfa 1.5px);
       background-size: 60px 60px;
-      background-position: 0 0, 30px 30px;
     }
-    @keyframes bounce-gentle { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+    @keyframes bounce-gentle { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
     .animate-bounce-gentle { animation: bounce-gentle 3s infinite ease-in-out; }
-    @keyframes pulse-ring { 0% { transform: scale(0.95); opacity: 0.8; } 50% { transform: scale(1.05); opacity: 0.4; } 100% { transform: scale(0.95); opacity: 0.8; } }
+    @keyframes pulse-ring { 0% { transform: scale(0.97); opacity: 0.9; } 50% { transform: scale(1.03); opacity: 0.5; } 100% { transform: scale(0.97); opacity: 0.9; } }
     .animate-pulse-ring { animation: pulse-ring 2s infinite ease-in-out; }
   </style>
 </head>
-<body class="sparkle-bg text-slate-700 min-h-screen p-4 md:p-8">
+<body class="sparkle-bg text-slate-700 min-h-screen p-4 md:p-6">
 
-  <!-- Header Section -->
-  <header class="max-w-6xl mx-auto mb-8 flex flex-col sm:flex-row items-center justify-between bg-white/80 backdrop-blur-md p-6 rounded-3xl shadow-sm border border-teal-100 gap-4">
+  <!-- Header -->
+  <header class="max-w-7xl mx-auto mb-6 flex flex-col sm:flex-row items-center justify-between bg-white/90 backdrop-blur-md p-5 rounded-3xl shadow-sm border border-teal-100 gap-4">
     <div class="flex items-center gap-4">
-      <div id="appLogoIcon" class="w-14 h-14 bg-teal-100 text-teal-600 rounded-2xl flex items-center justify-center text-3xl shadow-inner animate-bounce-gentle">
+      <div class="w-12 h-12 bg-teal-100 text-teal-600 rounded-2xl flex items-center justify-center text-2xl shadow-inner animate-bounce-gentle">
         💧
       </div>
       <div>
-        <h1 id="appHeaderTitle" class="text-3xl font-bold text-teal-600 flex items-center gap-2">
-          HydroApp <span class="text-xs bg-teal-100 text-teal-700 px-3 py-1 rounded-full font-sans font-semibold">Smart Timer Enabled</span>
+        <h1 class="text-2xl font-bold text-teal-600 flex items-center gap-2">
+          HydroApp <span class="text-xs bg-teal-100 text-teal-700 px-3 py-1 rounded-full font-sans font-semibold">Teacher Hub</span>
         </h1>
-        <p class="text-slate-500 font-medium text-sm">Smart Hydration & Bottle Pickup Monitor for Classrooms</p>
+        <p class="text-slate-500 font-medium text-xs">20-Student Monitoring Hub & Water Bottle Detector</p>
       </div>
     </div>
     
-    <div class="flex items-center gap-3">
-      <button onclick="openSettingsModal()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl font-semibold text-sm transition flex items-center gap-2 border border-slate-200 shadow-sm">
-        ⚙️ Edit Settings
-      </button>
-      <button id="muteBtn" onclick="toggleAudio()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl font-semibold text-sm transition flex items-center gap-2">
-        <span id="audioIcon">🔊</span> Sound Enabled
-      </button>
-      <div class="bg-teal-50 border border-teal-200 px-4 py-2 rounded-xl text-teal-700 font-semibold text-sm flex items-center gap-2">
-        <span class="w-2.5 h-2.5 bg-emerald-400 rounded-full animate-ping"></span> Live Station Active
+    <!-- Top Right Corner Controls for Teacher -->
+    <div class="flex flex-wrap items-center gap-3">
+      <!-- Teacher Student Selector Button -->
+      <div class="flex items-center bg-teal-50 border border-teal-200 rounded-2xl px-3 py-1.5 shadow-sm">
+        <span class="text-xs font-bold text-teal-800 mr-2 flex items-center gap-1">👩‍🏫 Select Student:</span>
+        <select id="teacherStudentSelector" onchange="onSelectStudentDropdown(this.value)" class="bg-white text-xs font-bold text-teal-700 py-1 px-3 rounded-xl border border-teal-200 focus:outline-none focus:ring-2 focus:ring-teal-400 cursor-pointer shadow-inner">
+          <!-- Dynamic options loaded in JS -->
+        </select>
       </div>
+
+      <button id="muteBtn" onclick="toggleAudio()" class="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-2xl font-semibold text-xs transition flex items-center gap-1.5 border border-slate-200">
+        <span id="audioIcon">🔊</span> Sound
+      </button>
     </div>
   </header>
 
-  <!-- Main Grid -->
-  <main class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
+  <!-- Explanation Banner: Water Bottle Detector -->
+  <section class="max-w-7xl mx-auto mb-6 bg-gradient-to-r from-teal-500 to-emerald-600 text-white p-5 rounded-3xl shadow-md flex flex-col md:flex-row items-center justify-between gap-4">
+    <div class="flex items-center gap-4">
+      <div class="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center text-2xl shrink-0">
+        🔌
+      </div>
+      <div>
+        <h3 class="font-heading font-bold text-lg">What is a Water Bottle Detector?</h3>
+        <p class="text-teal-50 text-xs mt-0.5">
+          A physical weight sensor attached to the desk coaster. It says <b>"DETECTED"</b> when the bottle is resting on the coaster, and <b>"NOT DETECTED"</b> when the student lifts the bottle to drink!
+        </p>
+      </div>
+    </div>
+    <div class="bg-white/10 px-4 py-2 rounded-2xl border border-white/20 text-xs font-semibold whitespace-nowrap text-center">
+      ⭐ Active Hardware Prototype for Ava (Desk 01)
+    </div>
+  </section>
+
+  <!-- Main Grid layout -->
+  <main class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6">
     
-    <!-- Left Column: Mascot & Real-Time Status -->
-    <section class="lg:col-span-2 space-y-8">
+    <!-- Left 2 Columns: Selected Student View -->
+    <section class="lg:col-span-2 space-y-6">
       
-      <!-- Student Hydration Status Card -->
-      <div class="bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-teal-100 relative overflow-hidden">
-        <div class="flex flex-col sm:flex-row items-center gap-8">
+      <!-- Selected Student Hydration Status Card -->
+      <div class="bg-white p-6 rounded-3xl shadow-sm border border-teal-100 relative">
+        <div class="flex flex-col sm:flex-row items-center gap-6">
           
-          <!-- Animated HydroBot Mascot SVG -->
+          <!-- HydroBot Mascot -->
           <div class="flex flex-col items-center">
-            <div id="mascotContainer" class="w-40 h-40 bg-teal-50 rounded-3xl flex items-center justify-center relative p-4 transition-all duration-300">
-              <svg id="hydroBotSvg" class="w-32 h-32 text-teal-500 transition-all duration-300" viewBox="0 0 100 120" fill="currentColor">
+            <div id="mascotContainer" class="w-36 h-36 bg-teal-50 rounded-3xl flex items-center justify-center p-3 transition-all duration-300">
+              <svg id="hydroBotSvg" class="w-28 h-28 text-teal-500 transition-all duration-300" viewBox="0 0 100 120" fill="currentColor">
                 <path d="M50 10 C 30 50, 10 70, 10 90 A 40 40 0 0 0 90 90 C 90 70, 70 50, 50 10 Z" fill="#2dd4bf"/>
                 <circle cx="38" cy="75" r="5" fill="#111827"/>
                 <circle cx="62" cy="75" r="5" fill="#111827"/>
@@ -74,100 +94,100 @@
                 <ellipse cx="70" cy="80" rx="4" ry="2" fill="#f43f5e" opacity="0.4"/>
               </svg>
             </div>
-            <span id="mascotLabel" class="mt-3 font-heading font-semibold text-teal-600 text-sm bg-teal-50 px-3 py-1 rounded-full">
+            <span id="mascotLabel" class="mt-2 font-heading font-semibold text-teal-600 text-xs bg-teal-50 px-3 py-1 rounded-full text-center">
               HydroBot: Next Drink in 10:00!
             </span>
           </div>
 
           <!-- Student Information -->
           <div class="flex-1 text-center sm:text-left">
-            <div class="flex items-center justify-center sm:justify-start gap-3 mb-2">
-              <span id="displayDeskBadge" class="bg-indigo-100 text-indigo-700 font-bold text-xs px-3 py-1 rounded-full uppercase tracking-wider">Desk 01</span>
-              <span id="statusBadge" class="bg-emerald-100 text-emerald-700 font-bold text-xs px-3 py-1 rounded-full flex items-center gap-1">
+            <div class="flex flex-wrap items-center justify-center sm:justify-start gap-2 mb-2">
+              <span id="displayDeskBadge" class="bg-indigo-100 text-indigo-700 font-bold text-xs px-3 py-1 rounded-full uppercase tracking-wider">Desk 01 • Hardware Prototype</span>
+              <span id="statusBadge" class="bg-emerald-100 text-emerald-700 font-bold text-xs px-3 py-1 rounded-full">
                 ● Normal Hydrated State
               </span>
             </div>
 
-            <h2 id="displayStudentName" class="text-3xl font-bold text-slate-800 mb-1">Alex Rivera</h2>
-            <p class="text-slate-400 text-sm mb-4">Smart Dock ID: <span class="font-mono text-slate-600">HYDRO-D01-98A</span></p>
+            <h2 id="displayStudentName" class="text-3xl font-bold text-slate-800 mb-1">Ava</h2>
+            <p id="displayCoasterId" class="text-slate-400 text-xs mb-4">Water Bottle Detector Coaster: <span class="font-mono text-slate-600">AVA-HYDRO-01</span></p>
 
             <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
               <div class="bg-slate-50 p-3 rounded-2xl border border-slate-100 text-center">
-                <p class="text-xs text-slate-400 font-semibold mb-1">Dock Sensor</p>
-                <p id="dockStateText" class="text-sm font-bold text-slate-700">On Dock 🍾</p>
+                <p class="text-[11px] text-slate-400 font-semibold mb-1">Detector Status</p>
+                <p id="detectorStateText" class="text-xs font-bold text-teal-700 bg-teal-50 border border-teal-100 py-1 px-2 rounded-lg inline-block">DETECTED 🍾</p>
               </div>
 
               <div class="bg-slate-50 p-3 rounded-2xl border border-slate-100 text-center">
-                <p class="text-xs text-slate-400 font-semibold mb-1">Drink Streak</p>
-                <p id="streakCount" class="text-sm font-bold text-teal-600">4 In a Row 🔥</p>
+                <p class="text-[11px] text-slate-400 font-semibold mb-1">Drink Streak</p>
+                <p id="streakCount" class="text-xs font-bold text-teal-600">4 In a Row 🔥</p>
               </div>
 
               <div class="bg-slate-50 p-3 rounded-2xl border border-slate-100 text-center col-span-2 sm:col-span-1">
-                <p class="text-xs text-slate-400 font-semibold mb-1">Last Drink</p>
-                <p id="lastHydratedTime" class="text-sm font-bold text-slate-700">Just Now</p>
+                <p class="text-[11px] text-slate-400 font-semibold mb-1">Last Drink</p>
+                <p id="lastHydratedTime" class="text-xs font-bold text-slate-700">Just Now</p>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Main 10-Minute Cycle Banner -->
+        <!-- 10-Minute Main Countdown Bar -->
         <div id="cycleTimerBanner" class="mt-6 bg-teal-50 border border-teal-200 p-4 rounded-2xl flex items-center justify-between">
           <div class="flex items-center gap-3">
             <span class="text-2xl">⏳</span>
             <div>
-              <p class="font-bold text-teal-800 text-sm">Next Hydration Reminder Cycle</p>
-              <p class="text-xs text-teal-600">Timer triggers buzzer automatically every 10 minutes</p>
+              <p class="font-bold text-teal-800 text-xs">Next Hydration Reminder Cycle</p>
+              <p class="text-[11px] text-teal-600">Buzzer triggers every 10 minutes</p>
             </div>
           </div>
           <span id="cycleTimerText" class="text-2xl font-heading font-bold text-teal-700">10:00</span>
         </div>
 
-        <!-- 5-Minute Grace Countdown Alert Bar (Active when buzzer rings) -->
+        <!-- 5-Minute Grace Countdown Alert Bar -->
         <div id="countdownBar" class="hidden mt-4 bg-amber-50 border border-amber-200 p-4 rounded-2xl flex items-center justify-between animate-pulse">
           <div class="flex items-center gap-3">
             <span class="text-2xl">⏰</span>
             <div>
-              <p class="font-bold text-amber-800 text-sm">Buzzer Active! 5-Minute Window Started!</p>
-              <p class="text-xs text-amber-600">Bottle must be lifted before 5 minutes expire or action is logged as FAILED</p>
+              <p class="font-bold text-amber-800 text-xs">Buzzer Active! 5-Minute Window Started!</p>
+              <p class="text-[11px] text-amber-600">Water Bottle Detector must show NOT DETECTED before 5 mins or FAILED</p>
             </div>
           </div>
-          <span id="timerSeconds" class="text-3xl font-heading font-bold text-amber-600">05:00</span>
+          <span id="timerSeconds" class="text-2xl font-heading font-bold text-amber-600">05:00</span>
         </div>
       </div>
 
-      <!-- Hardware Simulator Controls -->
-      <div class="bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-teal-100">
-        <h3 class="text-xl font-bold text-slate-800 mb-2 flex items-center gap-2">
-          ⚙️ Hardware Prototype Simulator
+      <!-- Detector Simulator Controls -->
+      <div class="bg-white p-6 rounded-3xl shadow-sm border border-teal-100">
+        <h3 class="text-lg font-bold text-slate-800 mb-1 flex items-center gap-2">
+          ⚙️ Water Bottle Detector Controls for <span id="controlsStudentName" class="text-teal-600">Ava</span>
         </h3>
-        <p class="text-slate-500 text-sm mb-6">Simulate hardware actions or manually trigger/test timers:</p>
+        <p class="text-slate-400 text-xs mb-4">Simulate physical bottle movements on the detector:</p>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <button onclick="triggerReminder()" class="p-4 bg-amber-500 hover:bg-amber-600 text-white font-heading font-bold rounded-2xl shadow-md transition flex items-center justify-center gap-2 text-lg">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <button onclick="triggerReminder()" class="p-3.5 bg-amber-500 hover:bg-amber-600 text-white font-heading font-bold rounded-2xl shadow transition text-sm flex items-center justify-center gap-2">
             🔔 Test 10-Min Alarm Now
           </button>
 
-          <button onclick="liftBottle()" class="p-4 bg-teal-500 hover:bg-teal-600 text-white font-heading font-bold rounded-2xl shadow-md transition flex items-center justify-center gap-2 text-lg">
-            🥤 Lift Bottle (Took Drink)
+          <button onclick="liftBottle()" class="p-3.5 bg-teal-500 hover:bg-teal-600 text-white font-heading font-bold rounded-2xl shadow transition text-sm flex items-center justify-center gap-2">
+            🥤 Lift Bottle (NOT DETECTED)
           </button>
 
-          <button onclick="returnBottle()" class="p-4 bg-slate-100 hover:bg-slate-200 text-slate-700 font-heading font-bold rounded-2xl transition flex items-center justify-center gap-2">
-            ⬇️ Return Bottle to Dock
+          <button onclick="returnBottle()" class="p-3.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-heading font-bold rounded-2xl transition text-xs flex items-center justify-center gap-2">
+            🍾 Return Bottle (DETECTED)
           </button>
 
-          <button onclick="forceTimeout()" class="p-4 bg-rose-100 hover:bg-rose-200 text-rose-700 font-heading font-bold rounded-2xl transition flex items-center justify-center gap-2">
+          <button onclick="forceTimeout()" class="p-3.5 bg-rose-100 hover:bg-rose-200 text-rose-700 font-heading font-bold rounded-2xl transition text-xs flex items-center justify-center gap-2">
             ⚠️ Force FAILED (5 Min Expired)
           </button>
         </div>
       </div>
 
-      <!-- Activity Timeline & Table -->
-      <div class="bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-teal-100">
-        <div class="flex items-center justify-between mb-4">
-          <h3 class="text-xl font-bold text-slate-800 flex items-center gap-2">
-            📊 5-Minute Window Action Log
+      <!-- Activity Log Table for Selected Student -->
+      <div class="bg-white p-6 rounded-3xl shadow-sm border border-teal-100">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+            📊 Activity Log for <span id="logStudentName" class="text-teal-600">Ava</span>
           </h3>
-          <button onclick="exportCSV()" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-600 font-semibold px-3 py-1.5 rounded-xl transition">
+          <button onclick="exportCSV()" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-600 font-semibold px-3 py-1 rounded-xl transition">
             📥 Export CSV
           </button>
         </div>
@@ -176,149 +196,202 @@
           <table class="w-full text-left text-xs text-slate-600">
             <thead class="bg-slate-50 font-heading font-bold text-slate-700 uppercase tracking-wider">
               <tr>
-                <th class="p-3 rounded-l-xl">Timestamp</th>
-                <th class="p-3">Student Name</th>
-                <th class="p-3">Action Result</th>
-                <th class="p-3 rounded-r-xl">Details</th>
+                <th class="p-2.5 rounded-l-xl">Time</th>
+                <th class="p-2.5">Student</th>
+                <th class="p-2.5">Detector Status</th>
+                <th class="p-2.5 rounded-r-xl">Details</th>
               </tr>
             </thead>
             <tbody id="eventLogTable" class="divide-y divide-slate-100 font-medium">
-              <!-- Dynamic rows will render here -->
+              <!-- Log entries dynamically rendered for active student -->
             </tbody>
           </table>
         </div>
       </div>
     </section>
 
-    <!-- Right Column: Teacher Mobile View & Dynamic QR Code -->
-    <section class="space-y-8">
+    <!-- Right Sidebar: 20-Student Classroom Tab -->
+    <section class="space-y-6">
       
-      <!-- Teacher QR Portal Card -->
-      <div class="bg-white p-6 rounded-3xl shadow-sm border border-teal-100 text-center">
-        <h3 class="text-xl font-bold text-slate-800 mb-1">Teacher QR Portal</h3>
-        <p class="text-xs text-slate-400 mb-4">Scan with iPad or phone camera to open dashboard</p>
-
-        <div class="bg-teal-50 p-4 rounded-2xl inline-block border border-teal-100 mb-3 shadow-inner">
-          <img id="qrCodeImg" src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https://ava141014.github.io/Hydro-App/&color=0d9488&bgcolor=f0fdf4" alt="Teacher QR Code" class="w-44 h-44 rounded-xl mx-auto shadow-sm">
+      <div class="bg-white p-5 rounded-3xl shadow-sm border border-teal-100">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-3">
+          <div>
+            <h3 class="font-bold text-slate-800 text-base">Classmate Roster</h3>
+            <p class="text-[11px] text-slate-400">Click any student to view their details</p>
+          </div>
+          <span class="text-xs bg-teal-100 text-teal-800 font-bold px-2.5 py-1 rounded-full">20 Active</span>
         </div>
 
-        <div class="text-left mt-2">
-          <label class="text-[11px] font-semibold text-slate-400">Target Website Link Encoded in QR:</label>
-          <div class="flex gap-2 mt-1">
-            <input type="text" id="qrUrlInput" value="https://ava141014.github.io/Hydro-App/" class="flex-1 text-xs px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl font-mono focus:outline-none focus:border-teal-400">
-            <button onclick="updateQrCode()" class="px-3 py-1.5 bg-teal-600 hover:bg-teal-700 text-white rounded-xl text-xs font-bold transition">Update</button>
+        <!-- Student List Scroll Area -->
+        <div class="space-y-2 max-h-[580px] overflow-y-auto pr-1 text-xs">
+          <div id="classListContainer">
+            <!-- Dynamic 20 student list rendered here -->
           </div>
         </div>
       </div>
 
-      <!-- Simulated Teacher Phone Screen -->
-      <div class="bg-slate-900 p-4 rounded-[40px] shadow-xl border-4 border-slate-800 max-w-xs mx-auto">
-        <!-- Phone Notch -->
-        <div class="w-24 h-4 bg-slate-800 rounded-full mx-auto mb-4"></div>
-
-        <!-- Phone Screen Content -->
-        <div class="bg-slate-50 rounded-[28px] p-4 text-left min-h-[380px] flex flex-col justify-between">
-          <div>
-            <!-- Phone Header -->
-            <div class="flex items-center justify-between border-b border-slate-200 pb-3 mb-3">
-              <div class="flex items-center gap-2">
-                <span class="text-lg">💧</span>
-                <span class="font-heading font-bold text-slate-800 text-sm">HydroApp Mobile</span>
-              </div>
-              <span class="text-[10px] bg-teal-100 text-teal-700 font-bold px-2 py-0.5 rounded-full">TEACHER</span>
-            </div>
-
-            <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Current Student</p>
-            <h4 id="phoneStudentName" class="font-bold text-slate-800 text-lg">Alex Rivera</h4>
-            <p id="phoneDeskId" class="text-xs text-slate-500 mb-4">Desk 01 • Smart Dock #01</p>
-
-            <!-- Phone Live Alert Box -->
-            <div id="phoneAlertBox" class="bg-emerald-50 border border-emerald-200 p-3 rounded-xl mb-4">
-              <p class="text-xs font-bold text-emerald-800 mb-0.5" id="phoneAlertTitle">STATUS: ALL GOOD</p>
-              <p class="text-[11px] text-emerald-600" id="phoneAlertBody">Student is hydrated. Next reminder scheduled in 10 minutes.</p>
-            </div>
-          </div>
-
-          <div>
-            <button onclick="teacherManualOverride()" class="w-full py-2.5 bg-teal-600 hover:bg-teal-700 text-white rounded-xl font-heading font-bold text-xs shadow transition">
-              ✓ Mark Hydrated (Override)
-            </button>
-            <p class="text-[10px] text-center text-slate-400 mt-2">Simulated Live Mobile Teacher Screen</p>
-          </div>
+      <!-- Teacher QR Scanner Box -->
+      <div class="bg-white p-5 rounded-3xl shadow-sm border border-teal-100 text-center">
+        <h4 class="font-bold text-slate-800 text-sm mb-1">Teacher Dashboard QR</h4>
+        <div class="bg-teal-50 p-3 rounded-2xl inline-block border border-teal-100 my-2">
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=https://ava141014.github.io/Hydro-App/&color=0d9488&bgcolor=f0fdf4" alt="QR Code" class="w-28 h-28 mx-auto rounded-lg">
         </div>
+        <p class="text-[10px] text-slate-400 font-mono">https://ava141014.github.io/Hydro-App/</p>
       </div>
 
     </section>
 
   </main>
 
-  <!-- Edit Settings Modal -->
-  <div id="settingsModal" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-teal-100">
-      <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
-        <h3 class="text-xl font-bold text-slate-800 flex items-center gap-2">
-          ⚙️ Edit Station Settings
-        </h3>
-        <button onclick="closeSettingsModal()" class="text-slate-400 hover:text-slate-600 text-xl font-bold">&times;</button>
-      </div>
-
-      <div class="space-y-4 text-sm">
-        <div>
-          <label class="block font-semibold text-slate-700 mb-1">Student Name</label>
-          <input type="text" id="inputStudentName" value="Alex Rivera" class="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-teal-500 font-medium">
-        </div>
-
-        <div>
-          <label class="block font-semibold text-slate-700 mb-1">Desk Number / ID</label>
-          <input type="text" id="inputDeskId" value="Desk 01" class="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-teal-500 font-medium">
-        </div>
-
-        <div>
-          <label class="block font-semibold text-slate-700 mb-1">Theme Color</label>
-          <select id="inputThemeColor" class="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-teal-500 font-medium">
-            <option value="teal">Teal & Mint (Default)</option>
-            <option value="pink">Pastel Pink</option>
-            <option value="blue">Ocean Blue</option>
-            <option value="amber">Warm Amber</option>
-            <option value="purple">Lavender Purple</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="flex gap-3 mt-6">
-        <button onclick="closeSettingsModal()" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-xl text-xs transition">Cancel</button>
-        <button onclick="saveSettings()" class="flex-1 py-2.5 bg-teal-600 hover:bg-teal-700 text-white font-bold rounded-xl text-xs shadow transition">Save Settings</button>
-      </div>
-    </div>
-  </div>
-
   <script>
-    // System State Variables
+    // 20 Classmates Roster with Individual Log History
+    const students = [
+      { name: "Ava", desk: "Desk 01 (Hardware Prototype)", isHardware: true, detector: "DETECTED", streak: 4, lastDrink: "Just Now", logs: [] },
+      { name: "Nyla", desk: "Desk 02", isHardware: false, detector: "DETECTED", streak: 3, lastDrink: "12 mins ago", logs: [] },
+      { name: "Hannah A", desk: "Desk 03", isHardware: false, detector: "DETECTED", streak: 5, lastDrink: "5 mins ago", logs: [] },
+      { name: "Arissa", desk: "Desk 04", isHardware: false, detector: "DETECTED", streak: 2, lastDrink: "18 mins ago", logs: [] },
+      { name: "Aisyah", desk: "Desk 05", isHardware: false, detector: "DETECTED", streak: 4, lastDrink: "8 mins ago", logs: [] },
+      { name: "Medina", desk: "Desk 06", isHardware: false, detector: "DETECTED", streak: 3, lastDrink: "14 mins ago", logs: [] },
+      { name: "Sofea", desk: "Desk 07", isHardware: false, detector: "DETECTED", streak: 4, lastDrink: "10 mins ago", logs: [] },
+      { name: "Ariana", desk: "Desk 08", isHardware: false, detector: "DETECTED", streak: 3, lastDrink: "22 mins ago", logs: [] },
+      { name: "Hana I", desk: "Desk 09", isHardware: false, detector: "DETECTED", streak: 2, lastDrink: "25 mins ago", logs: [] },
+      { name: "Maryam", desk: "Desk 10", isHardware: false, detector: "DETECTED", streak: 5, lastDrink: "2 mins ago", logs: [] },
+      { name: "Aireen", desk: "Desk 11", isHardware: false, detector: "DETECTED", streak: 3, lastDrink: "15 mins ago", logs: [] },
+      { name: "Audrey", desk: "Desk 12", isHardware: false, detector: "DETECTED", streak: 4, lastDrink: "7 mins ago", logs: [] },
+      { name: "Umar", desk: "Desk 13", isHardware: false, detector: "DETECTED", streak: 2, lastDrink: "30 mins ago", logs: [] },
+      { name: "Khalish", desk: "Desk 14", isHardware: false, detector: "DETECTED", streak: 3, lastDrink: "11 mins ago", logs: [] },
+      { name: "Miqael", desk: "Desk 15", isHardware: false, detector: "DETECTED", streak: 4, lastDrink: "9 mins ago", logs: [] },
+      { name: "Zayd", desk: "Desk 16", isHardware: false, detector: "DETECTED", streak: 3, lastDrink: "16 mins ago", logs: [] },
+      { name: "Ilham", desk: "Desk 17", isHardware: false, detector: "DETECTED", streak: 2, lastDrink: "20 mins ago", logs: [] },
+      { name: "Hanif", desk: "Desk 18", isHardware: false, detector: "DETECTED", streak: 4, lastDrink: "6 mins ago", logs: [] },
+      { name: "Zayyan", desk: "Desk 19", isHardware: false, detector: "DETECTED", streak: 3, lastDrink: "13 mins ago", logs: [] },
+      { name: "Izz", desk: "Desk 20", isHardware: false, detector: "DETECTED", streak: 4, lastDrink: "4 mins ago", logs: [] }
+    ];
+
+    let selectedStudentIndex = 0; // Ava default
     let audioEnabled = true;
     let isGracePeriodActive = false;
     
-    // Timers
     let main10MinCycleTimer = null;
     let grace5MinTimer = null;
-    let mainCycleSecondsLeft = 600; // 10 minutes = 600 seconds
-    let graceSecondsLeft = 300;      // 5 minutes = 300 seconds
-
-    let streak = 4;
-    let currentStudentName = localStorage.getItem('hydro_studentName') || "Alex Rivera";
-    let currentDeskId = localStorage.getItem('hydro_deskId') || "Desk 01";
+    let mainCycleSecondsLeft = 600; // 10 mins
+    let graceSecondsLeft = 300;      // 5 mins
     let audioCtx = null;
 
-    // Initialize UI on load
     window.onload = function() {
-      applyStudentInfo();
+      // Initialize starter logs for all students
+      students.forEach(s => {
+        s.logs.push({
+          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
+          result: 'SUCCESS',
+          details: 'Station active. Detector status: DETECTED'
+        });
+      });
+
+      populateDropdown();
+      renderClassList();
+      selectStudent(0);
       startMain10MinCycle();
-      addLogEntry(currentStudentName, 'SUCCESS', 'Station booted up. 10-minute countdown initialized.');
     };
 
-    // 10-Minute Main Cycle Logic
+    function populateDropdown() {
+      const dropdown = document.getElementById('teacherStudentSelector');
+      dropdown.innerHTML = '';
+      students.forEach((s, idx) => {
+        const opt = document.createElement('option');
+        opt.value = idx;
+        opt.innerText = `${s.name} (${s.desk.split(' ')[0]} ${s.desk.split(' ')[1]})`;
+        dropdown.appendChild(opt);
+      });
+    }
+
+    function onSelectStudentDropdown(idx) {
+      selectStudent(parseInt(idx));
+    }
+
+    function renderClassList() {
+      const container = document.getElementById('classListContainer');
+      container.innerHTML = '';
+
+      students.forEach((s, idx) => {
+        const item = document.createElement('div');
+        const isSelected = idx === selectedStudentIndex;
+        
+        item.className = `p-3 rounded-2xl cursor-pointer border transition flex items-center justify-between ${
+          isSelected ? 'bg-teal-50 border-teal-300 shadow-sm ring-1 ring-teal-200' : 'bg-slate-50 border-slate-100 hover:bg-slate-100'
+        }`;
+
+        item.onclick = () => selectStudent(idx);
+
+        item.innerHTML = `
+          <div>
+            <div class="flex items-center gap-1.5">
+              <span class="font-bold text-slate-800 text-xs">${s.name}</span>
+              ${s.isHardware ? '<span class="bg-teal-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-md">HARDWARE</span>' : ''}
+            </div>
+            <p class="text-[10px] text-slate-400">${s.desk}</p>
+          </div>
+
+          <div class="text-right">
+            <span class="text-[10px] font-bold ${s.detector === 'DETECTED' ? 'text-teal-700 bg-teal-100' : 'text-amber-700 bg-amber-100'} px-2 py-0.5 rounded-full block">
+              ${s.detector}
+            </span>
+            <span class="text-[9px] text-slate-400 font-medium">Streak: ${s.streak} 🔥</span>
+          </div>
+        `;
+        container.appendChild(item);
+      });
+    }
+
+    function selectStudent(idx) {
+      selectedStudentIndex = idx;
+      const s = students[idx];
+
+      // Update Top Right Dropdown sync
+      document.getElementById('teacherStudentSelector').value = idx;
+
+      // Update UI Header & Labels
+      document.getElementById('displayStudentName').innerText = s.name;
+      document.getElementById('displayDeskBadge').innerText = s.desk;
+      document.getElementById('displayCoasterId').innerHTML = `Water Bottle Detector Coaster: <span class="font-mono text-slate-600">${s.name.toUpperCase()}-HYDRO-01</span>`;
+      document.getElementById('controlsStudentName').innerText = s.name;
+      document.getElementById('logStudentName').innerText = s.name;
+
+      // Update Detector & Streak
+      document.getElementById('detectorStateText').innerText = `${s.detector} ${s.detector === 'DETECTED' ? '🍾' : '🥤'}`;
+      document.getElementById('detectorStateText').className = `text-xs font-bold ${s.detector === 'DETECTED' ? 'text-teal-700 bg-teal-50 border border-teal-100' : 'text-amber-700 bg-amber-50 border border-amber-100'} py-1 px-2 rounded-lg inline-block`;
+      document.getElementById('streakCount').innerText = `${s.streak} In a Row 🔥`;
+      document.getElementById('lastHydratedTime').innerText = s.lastDrink;
+
+      renderClassList();
+      renderLogsForSelectedStudent();
+    }
+
+    function renderLogsForSelectedStudent() {
+      const table = document.getElementById('eventLogTable');
+      table.innerHTML = '';
+      const s = students[selectedStudentIndex];
+
+      s.logs.forEach(log => {
+        let badgeStyle = 'bg-emerald-100 text-emerald-800';
+        if (log.result.includes('FAILED')) badgeStyle = 'bg-rose-100 text-rose-800 font-bold';
+        if (log.result.includes('WARNING')) badgeStyle = 'bg-amber-100 text-amber-800';
+
+        const row = document.createElement('tr');
+        row.className = 'hover:bg-slate-50 transition border-b border-slate-100';
+        row.innerHTML = `
+          <td class="p-2.5 font-mono text-slate-500">${log.time}</td>
+          <td class="p-2.5 font-bold text-slate-700">${s.name}</td>
+          <td class="p-2.5"><span class="${badgeStyle} px-2 py-0.5 rounded-full text-[10px]">${log.result}</span></td>
+          <td class="p-2.5 text-slate-500">${log.details}</td>
+        `;
+        table.appendChild(row);
+      });
+    }
+
     function startMain10MinCycle() {
       if (main10MinCycleTimer) clearInterval(main10MinCycleTimer);
-      mainCycleSecondsLeft = 600; // Reset to 10 minutes (600s)
+      mainCycleSecondsLeft = 600;
 
       main10MinCycleTimer = setInterval(() => {
         if (!isGracePeriodActive) {
@@ -342,93 +415,19 @@
       }
     }
 
-    // Audio synthesizer
-    function playTone(freq, type, duration) {
-      if (!audioEnabled) return;
-      try {
-        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.type = type;
-        osc.frequency.value = freq;
-        gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        osc.start();
-        osc.stop(audioCtx.currentTime + duration);
-      } catch (e) {
-        console.log("Audio not active");
-      }
-    }
-
-    function toggleAudio() {
-      audioEnabled = !audioEnabled;
-      document.getElementById('audioIcon').innerText = audioEnabled ? '🔊' : '🔇';
-      document.getElementById('muteBtn').innerText = audioEnabled ? '🔊 Sound Enabled' : '🔇 Muted';
-    }
-
-    function addLogEntry(student, result, details) {
-      const table = document.getElementById('eventLogTable');
-      const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-      
-      let badgeStyle = 'bg-emerald-100 text-emerald-800';
-      if (result.includes('FAILED')) badgeStyle = 'bg-rose-100 text-rose-800 font-bold';
-      if (result.includes('WARNING')) badgeStyle = 'bg-amber-100 text-amber-800';
-
-      const row = document.createElement('tr');
-      row.className = 'hover:bg-slate-50 transition border-b border-slate-100';
-      row.innerHTML = `
-        <td class="p-3 font-mono text-slate-500">${timeStr}</td>
-        <td class="p-3 font-bold text-slate-700">${student}</td>
-        <td class="p-3"><span class="${badgeStyle} px-2.5 py-1 rounded-full">${result}</span></td>
-        <td class="p-3 text-slate-500">${details}</td>
-      `;
-      table.prepend(row);
-    }
-
-    function updateMascot(state) {
-      const svg = document.getElementById('hydroBotSvg');
-      const mouth = document.getElementById('mascotMouth');
-      const label = document.getElementById('mascotLabel');
-      const container = document.getElementById('mascotContainer');
-
-      if (state === 'happy') {
-        svg.style.color = '#2dd4bf';
-        mouth.setAttribute('d', 'M 42 85 Q 50 92 58 85');
-        label.innerText = 'HydroBot: Hydrated! ✨';
-        container.className = 'w-40 h-40 bg-teal-50 rounded-3xl flex items-center justify-center relative p-4 transition-all duration-300';
-      } else if (state === 'worried') {
-        svg.style.color = '#f59e0b';
-        mouth.setAttribute('d', 'M 42 88 Q 50 82 58 88');
-        label.innerText = 'HydroBot: Time to Drink! (5 min grace window)';
-        container.className = 'w-40 h-40 bg-amber-50 rounded-3xl flex items-center justify-center relative p-4 transition-all duration-300 animate-pulse-ring';
-      } else if (state === 'sad') {
-        svg.style.color = '#f43f5e';
-        mouth.setAttribute('d', 'M 42 90 Q 50 80 58 90');
-        label.innerText = 'HydroBot: FAILED (Missed >5 min window) 😢';
-        container.className = 'w-40 h-40 bg-rose-50 rounded-3xl flex items-center justify-center relative p-4 transition-all duration-300';
-      }
-    }
-
-    // Trigger Alarm & Start 5-Minute Grace Window
     function triggerReminder() {
       if (isGracePeriodActive) return;
       isGracePeriodActive = true;
-      graceSecondsLeft = 300; // 5 minutes = 300s
+      graceSecondsLeft = 300;
 
       document.getElementById('countdownBar').classList.remove('hidden');
       updateGraceTimerDisplay();
       
-      document.getElementById('statusBadge').className = 'bg-amber-100 text-amber-700 font-bold text-xs px-3 py-1 rounded-full flex items-center gap-1';
-      document.getElementById('statusBadge').innerText = '● 10-MIN ALARM: 5-MIN GRACE STARTED';
-
-      document.getElementById('phoneAlertBox').className = 'bg-amber-50 border border-amber-200 p-3 rounded-xl mb-4';
-      document.getElementById('phoneAlertTitle').innerText = '⏰ 10-MIN REMINDER ALARM';
-      document.getElementById('phoneAlertBody').innerText = `${currentStudentName} has 5 minutes to lift the bottle.`;
+      document.getElementById('statusBadge').className = 'bg-amber-100 text-amber-700 font-bold text-xs px-3 py-1 rounded-full';
+      document.getElementById('statusBadge').innerText = '● 10-MIN ALARM: 5-MIN WINDOW STARTED';
 
       updateMascot('worried');
-      addLogEntry(currentStudentName, 'WARNING', '10-minute alarm triggered. 5-minute pickup countdown started.');
+      addStudentLog(selectedStudentIndex, 'WARNING', '10-min alarm triggered. Detector waiting for NOT DETECTED status.');
 
       playTone(880, 'sine', 0.2);
 
@@ -436,10 +435,6 @@
       grace5MinTimer = setInterval(() => {
         graceSecondsLeft--;
         updateGraceTimerDisplay();
-        
-        if (graceSecondsLeft % 30 === 0) {
-          playTone(600, 'sine', 0.1);
-        }
 
         if (graceSecondsLeft <= 0) {
           clearInterval(grace5MinTimer);
@@ -459,35 +454,39 @@
       const timeTakenSecs = 300 - graceSecondsLeft;
       isGracePeriodActive = false;
 
+      const s = students[selectedStudentIndex];
+      s.detector = "NOT DETECTED";
+      s.streak++;
+      s.lastDrink = "Just Now";
+
       document.getElementById('countdownBar').classList.add('hidden');
-      document.getElementById('dockStateText').innerText = 'Picked Up 🥤';
+      document.getElementById('detectorStateText').innerText = 'NOT DETECTED 🥤';
+      document.getElementById('detectorStateText').className = 'text-xs font-bold text-amber-700 bg-amber-50 border border-amber-100 py-1 px-2 rounded-lg inline-block';
       
-      streak++;
-      document.getElementById('streakCount').innerText = `${streak} In a Row 🔥`;
+      document.getElementById('streakCount').innerText = `${s.streak} In a Row 🔥`;
       document.getElementById('lastHydratedTime').innerText = 'Just Now';
 
-      document.getElementById('statusBadge').className = 'bg-emerald-100 text-emerald-700 font-bold text-xs px-3 py-1 rounded-full flex items-center gap-1';
-      document.getElementById('statusBadge').innerText = '● HYDRATED / PICKED UP';
-
-      document.getElementById('phoneAlertBox').className = 'bg-emerald-50 border border-emerald-200 p-3 rounded-xl mb-4';
-      document.getElementById('phoneAlertTitle').innerText = '✓ SUCCESSFUL DRINK';
-      document.getElementById('phoneAlertBody').innerText = `${currentStudentName} took a drink within the 5-minute window!`;
+      document.getElementById('statusBadge').className = 'bg-emerald-100 text-emerald-700 font-bold text-xs px-3 py-1 rounded-full';
+      document.getElementById('statusBadge').innerText = '● HYDRATED (BOTTLE LIFTED)';
 
       updateMascot('happy');
-      addLogEntry(currentStudentName, 'SUCCESS', `Lifted water bottle successfully after ${timeTakenSecs}s.`);
+      renderClassList();
+      addStudentLog(selectedStudentIndex, 'SUCCESS', `Detector status changed to NOT DETECTED (${timeTakenSecs}s reaction).`);
 
-      // Chime Tone
       playTone(523.25, 'triangle', 0.15);
       setTimeout(() => playTone(659.25, 'triangle', 0.15), 150);
       setTimeout(() => playTone(783.99, 'triangle', 0.3), 300);
 
-      // Reset 10-Minute Timer for next round
       startMain10MinCycle();
     }
 
     function returnBottle() {
-      document.getElementById('dockStateText').innerText = 'On Dock 🍾';
-      addLogEntry(currentStudentName, 'INFO', 'Bottle placed back on dock.');
+      const s = students[selectedStudentIndex];
+      s.detector = "DETECTED";
+      document.getElementById('detectorStateText').innerText = 'DETECTED 🍾';
+      document.getElementById('detectorStateText').className = 'text-xs font-bold text-teal-700 bg-teal-50 border border-teal-100 py-1 px-2 rounded-lg inline-block';
+      renderClassList();
+      addStudentLog(selectedStudentIndex, 'INFO', 'Bottle placed back. Detector status: DETECTED.');
       playTone(400, 'sine', 0.1);
     }
 
@@ -495,83 +494,91 @@
       if (grace5MinTimer) clearInterval(grace5MinTimer);
       isGracePeriodActive = false;
 
+      const s = students[selectedStudentIndex];
+      s.streak = 0;
       document.getElementById('countdownBar').classList.add('hidden');
-      
-      streak = 0;
       document.getElementById('streakCount').innerText = `0 In a Row ❌`;
 
-      document.getElementById('statusBadge').className = 'bg-rose-100 text-rose-700 font-bold text-xs px-3 py-1 rounded-full flex items-center gap-1';
+      document.getElementById('statusBadge').className = 'bg-rose-100 text-rose-700 font-bold text-xs px-3 py-1 rounded-full';
       document.getElementById('statusBadge').innerText = '● FAILED (MISSED >5 MIN)';
 
-      document.getElementById('phoneAlertBox').className = 'bg-rose-50 border border-rose-200 p-3 rounded-xl mb-4';
-      document.getElementById('phoneAlertTitle').innerText = '❌ FAILED PICKUP';
-      document.getElementById('phoneAlertBody').innerText = `Alert! ${currentStudentName} failed to drink water within 5 minutes.`;
-
       updateMascot('sad');
-      addLogEntry(currentStudentName, 'FAILED', 'Did not pick up water bottle within 5 minutes.');
+      renderClassList();
+      addStudentLog(selectedStudentIndex, 'FAILED', 'Detector remained DETECTED for over 5 minutes after alarm.');
 
       playTone(220, 'sawtooth', 0.4);
-
-      // Reset 10-Minute Timer for next round
       startMain10MinCycle();
     }
 
-    function teacherManualOverride() {
-      liftBottle();
-      addLogEntry(currentStudentName, 'OVERRIDE', 'Teacher manually marked student as hydrated.');
+    function updateMascot(state) {
+      const svg = document.getElementById('hydroBotSvg');
+      const mouth = document.getElementById('mascotMouth');
+      const label = document.getElementById('mascotLabel');
+      const container = document.getElementById('mascotContainer');
+
+      if (state === 'happy') {
+        svg.style.color = '#2dd4bf';
+        mouth.setAttribute('d', 'M 42 85 Q 50 92 58 85');
+        label.innerText = 'HydroBot: Bottle Lifted & Hydrated! ✨';
+        container.className = 'w-36 h-36 bg-teal-50 rounded-3xl flex items-center justify-center p-3 transition-all duration-300';
+      } else if (state === 'worried') {
+        svg.style.color = '#f59e0b';
+        mouth.setAttribute('d', 'M 42 88 Q 50 82 58 88');
+        label.innerText = 'HydroBot: Waiting for Bottle Pickup! ⏰';
+        container.className = 'w-36 h-36 bg-amber-50 rounded-3xl flex items-center justify-center p-3 transition-all duration-300 animate-pulse-ring';
+      } else if (state === 'sad') {
+        svg.style.color = '#f43f5e';
+        mouth.setAttribute('d', 'M 42 90 Q 50 80 58 90');
+        label.innerText = 'HydroBot: FAILED (>5 mins missed) 😢';
+        container.className = 'w-36 h-36 bg-rose-50 rounded-3xl flex items-center justify-center p-3 transition-all duration-300';
+      }
     }
 
-    function updateQrCode() {
-      const url = document.getElementById('qrUrlInput').value;
-      const qrImg = document.getElementById('qrCodeImg');
-      qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(url)}&color=0d9488&bgcolor=f0fdf4`;
+    function addStudentLog(studentIdx, result, details) {
+      const s = students[studentIdx];
+      s.logs.unshift({
+        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
+        result: result,
+        details: details
+      });
+      renderLogsForSelectedStudent();
     }
 
-    // Modal & Customization Settings Logic
-    function openSettingsModal() {
-      document.getElementById('inputStudentName').value = currentStudentName;
-      document.getElementById('inputDeskId').value = currentDeskId;
-      document.getElementById('settingsModal').classList.remove('hidden');
+    function playTone(freq, type, duration) {
+      if (!audioEnabled) return;
+      try {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = type;
+        osc.frequency.value = freq;
+        gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration);
+      } catch (e) {}
     }
 
-    function closeSettingsModal() {
-      document.getElementById('settingsModal').classList.add('hidden');
-    }
-
-    function saveSettings() {
-      currentStudentName = document.getElementById('inputStudentName').value || "Alex Rivera";
-      currentDeskId = document.getElementById('inputDeskId').value || "Desk 01";
-
-      localStorage.setItem('hydro_studentName', currentStudentName);
-      localStorage.setItem('hydro_deskId', currentDeskId);
-
-      applyStudentInfo();
-      closeSettingsModal();
-      addLogEntry(currentStudentName, 'INFO', 'Station details updated in settings.');
-    }
-
-    function applyStudentInfo() {
-      document.getElementById('displayStudentName').innerText = currentStudentName;
-      document.getElementById('displayDeskBadge').innerText = currentDeskId;
-      document.getElementById('phoneStudentName').innerText = currentStudentName;
-      document.getElementById('phoneDeskId').innerText = `${currentDeskId} • Smart Dock #01`;
+    function toggleAudio() {
+      audioEnabled = !audioEnabled;
+      document.getElementById('audioIcon').innerText = audioEnabled ? '🔊' : '🔇';
+      document.getElementById('muteBtn').innerText = audioEnabled ? '🔊 Sound' : '🔇 Muted';
     }
 
     function exportCSV() {
-      let csv = "Timestamp,Student,Result,Details\n";
-      const rows = document.querySelectorAll('#eventLogTable tr');
-      rows.forEach(r => {
-        const cols = r.querySelectorAll('td');
-        if (cols.length === 4) {
-          csv += `"${cols[0].innerText}","${cols[1].innerText}","${cols[2].innerText}","${cols[3].innerText}"\n`;
-        }
+      const s = students[selectedStudentIndex];
+      let csv = `Timestamp,Student,Detector Status,Details\n`;
+      s.logs.forEach(l => {
+        csv += `"${l.time}","${s.name}","${l.result}","${l.details}"\n`;
       });
 
       const blob = new Blob([csv], { type: 'text/csv' });
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = 'hydroapp_5min_log.csv';
+      a.download = `hydroapp_${s.name.toLowerCase()}_log.csv`;
       a.click();
     }
   </script>
