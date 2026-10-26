@@ -581,5 +581,26 @@
       a.click();
     }
   </script>
+  <script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+  import { getAuth } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+  import { getDatabase } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-database.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyABRvO1V5qJ5TvDbCckq_2pXd-Zb9XTOc4",
+    authDomain: "hydrosip-20853.firebaseapp.com",
+    databaseURL: "https://hydrosip-20853-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "hydrosip-20853",
+    storageBucket: "hydrosip-20853.firebasestorage.app",
+    messagingSenderId: "768224688643",
+    appId: "1:768224688643:web:8430e9522d818f54522c36"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const database = getDatabase(app);
+
+  console.log("HydroSip Firebase initialized!");
+</script>
 </body>
 </html>
