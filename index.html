@@ -55,7 +55,6 @@
       background: #00c4b4;
       border-radius: 50%;
       display: flex;
-      align-items: justify;
       justify-content: center;
       align-items: center;
       color: white;
@@ -181,21 +180,23 @@
       gap: 24px;
     }
 
-    /* HYDROBOT WATER DROPLET MASCOT */
-    .mascot {
-      width: 90px;
-      height: 100px;
-      background: #38bdf8;
-      border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
-      position: relative;
+    /* SVG WATER DROPLET MASCOT CONTAINER */
+    .mascot-container {
       display: flex;
-      justify-content: center;
+      flex-direction: column;
       align-items: center;
-      clip-path: polygon(50% 0%, 100% 70%, 80% 100%, 20% 100%, 0% 70%);
     }
 
-    .mascot-face {
-      font-size: 20px;
+    .mascot-svg {
+      width: 90px;
+      height: 100px;
+    }
+
+    .mascot-status-text {
+      font-size: 12px;
+      font-weight: 700;
+      color: #00a494;
+      margin-top: 6px;
     }
 
     .student-info h2 {
@@ -353,6 +354,11 @@
       border: 1px solid #bae6fd;
     }
 
+    .roster-card.is-absent-roster {
+      opacity: 0.6;
+      background: #f1f5f9;
+    }
+
     .roster-card h5 { font-size: 14px; }
     .roster-card p { font-size: 11px; color: var(--text-muted); }
 
@@ -360,6 +366,10 @@
       font-size: 11px;
       font-weight: 700;
       color: #00b4a2;
+    }
+
+    .status-tag-absent {
+      color: #64748b !important;
     }
 
     /* QR CARD */
@@ -411,13 +421,27 @@
       <!-- STUDENT CARD -->
       <div class="card" id="studentCard">
         <div class="student-header">
-          <span class="desk-badge">DESK 01 (HARDWARE PROTOTYPE)</span>
+          <span class="desk-badge" id="deskBadge">DESK 01 (HARDWARE PROTOTYPE)</span>
           <span id="attendanceBadge" class="status-badge">● Normal Hydrated State</span>
         </div>
 
         <div class="student-body">
-          <div class="mascot">
-            <span class="mascot-face">😊</span>
+          <!-- SVG WATER DROPLET MASCOT -->
+          <div class="mascot-container">
+            <svg class="mascot-svg" viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg">
+              <path d="M50 10 C50 10 90 60 90 85 A40 40 0 0 1 10 85 C10 60 50 10 50 10 Z" fill="#38bdf8" />
+              <!-- Eyes -->
+              <circle cx="38" cy="75" r="4" fill="#1e293b" />
+              <circle cx="62" cy="75" r="4" fill="#1e293b" />
+              <circle cx="40" cy="73" r="1.5" fill="#ffffff" />
+              <circle cx="64" cy="73" r="1.5" fill="#ffffff" />
+              <!-- Cheeks -->
+              <circle cx="30" cy="82" r="4" fill="#f43f5e" opacity="0.4" />
+              <circle cx="70" cy="82" r="4" fill="#f43f5e" opacity="0.4" />
+              <!-- Smile -->
+              <path d="M42 84 Q50 90 58 84" stroke="#1e293b" stroke-width="2.5" stroke-linecap="round" fill="none" />
+            </svg>
+            <div class="mascot-status-text" id="mascotStatusText">HydroBot: Next Drink in 04:47!</div>
           </div>
 
           <div class="student-info">
@@ -451,7 +475,7 @@
             <p>Buzzer triggers every 10 minutes</p>
           </div>
         </div>
-        <div class="timer-digits" id="cycleTimer">04:42</div>
+        <div class="timer-digits" id="cycleTimer">04:47</div>
       </div>
 
       <!-- CONTROLS + ABSENT BUTTON -->
@@ -509,56 +533,7 @@
         <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 12px;">Click any student to view details</p>
 
         <div class="roster-list" id="rosterList">
-          <div class="roster-card active" onclick="switchStudent('Ava')">
-            <div>
-              <h5>Ava <span style="background:#00b4a2; color:white; font-size:9px; padding:2px 6px; border-radius:6px;">HARDWARE</span></h5>
-              <p>Desk 01 (Hardware Prototype)</p>
-            </div>
-            <div style="text-align: right;">
-              <span class="status-tag">DETECTED</span>
-              <p>Streak: 4 🔥</p>
-            </div>
-          </div>
-
-          <div class="roster-card" onclick="switchStudent('Nyla')">
-            <div><h5>Nyla</h5><p>Desk 02</p></div>
-            <div style="text-align: right;"><span class="status-tag">DETECTED</span><p>Streak: 3 🔥</p></div>
-          </div>
-
-          <div class="roster-card" onclick="switchStudent('Hannah A')">
-            <div><h5>Hannah A</h5><p>Desk 03</p></div>
-            <div style="text-align: right;"><span class="status-tag">DETECTED</span><p>Streak: 5 🔥</p></div>
-          </div>
-
-          <div class="roster-card" onclick="switchStudent('Arissa')">
-            <div><h5>Arissa</h5><p>Desk 04</p></div>
-            <div style="text-align: right;"><span class="status-tag">DETECTED</span><p>Streak: 2 🔥</p></div>
-          </div>
-
-          <div class="roster-card" onclick="switchStudent('Aisyah')">
-            <div><h5>Aisyah</h5><p>Desk 05</p></div>
-            <div style="text-align: right;"><span class="status-tag">DETECTED</span><p>Streak: 4 🔥</p></div>
-          </div>
-
-          <div class="roster-card" onclick="switchStudent('Medina')">
-            <div><h5>Medina</h5><p>Desk 06</p></div>
-            <div style="text-align: right;"><span class="status-tag">DETECTED</span><p>Streak: 3 🔥</p></div>
-          </div>
-
-          <div class="roster-card" onclick="switchStudent('Sofea')">
-            <div><h5>Sofea</h5><p>Desk 07</p></div>
-            <div style="text-align: right;"><span class="status-tag">DETECTED</span><p>Streak: 4 🔥</p></div>
-          </div>
-
-          <div class="roster-card" onclick="switchStudent('Ariana')">
-            <div><h5>Ariana</h5><p>Desk 08</p></div>
-            <div style="text-align: right;"><span class="status-tag">DETECTED</span><p>Streak: 3 🔥</p></div>
-          </div>
-
-          <div class="roster-card" onclick="switchStudent('Hana I')">
-            <div><h5>Hana I</h5><p>Desk 09</p></div>
-            <div style="text-align: right;"><span class="status-tag">DETECTED</span><p>Streak: 2 🔥</p></div>
-          </div>
+          <!-- Dynamically generated roster list -->
         </div>
       </div>
 
@@ -573,59 +548,135 @@
 
   <!-- JAVASCRIPT -->
   <script>
-    let isAbsent = false;
-    let streak = 4;
+    // STUDENT DATA ROSTER WITH INDIVIDUAL ABSENT TRACKING
+    const studentsData = [
+      { name: "Ava", desk: "DESK 01 (HARDWARE PROTOTYPE)", coaster: "AVA-HYDRO-01", streak: 4, status: "DETECTED 🍾", isAbsent: false, isHardware: true },
+      { name: "Nyla", desk: "Desk 02", coaster: "HYDRO-02", streak: 3, status: "DETECTED 🍾", isAbsent: false, isHardware: false },
+      { name: "Hannah A", desk: "Desk 03", coaster: "HYDRO-03", streak: 5, status: "DETECTED 🍾", isAbsent: false, isHardware: false },
+      { name: "Arissa", desk: "Desk 04", coaster: "HYDRO-04", streak: 2, status: "DETECTED 🍾", isAbsent: false, isHardware: false },
+      { name: "Aisyah", desk: "Desk 05", coaster: "HYDRO-05", streak: 4, status: "DETECTED 🍾", isAbsent: false, isHardware: false },
+      { name: "Medina", desk: "Desk 06", coaster: "HYDRO-06", streak: 3, status: "DETECTED 🍾", isAbsent: false, isHardware: false },
+      { name: "Sofea", desk: "Desk 07", coaster: "HYDRO-07", streak: 4, status: "DETECTED 🍾", isAbsent: false, isHardware: false },
+      { name: "Ariana", desk: "Desk 08", coaster: "HYDRO-08", streak: 3, status: "DETECTED 🍾", isAbsent: false, isHardware: false },
+      { name: "Hana I", desk: "Desk 09", coaster: "HYDRO-09", streak: 2, status: "DETECTED 🍾", isAbsent: false, isHardware: false }
+    ];
 
+    let activeStudent = studentsData[0];
+
+    function renderRoster() {
+      const container = document.getElementById("rosterList");
+      container.innerHTML = "";
+
+      studentsData.forEach(student => {
+        const item = document.createElement("div");
+        item.className = `roster-card ${student.name === activeStudent.name ? 'active' : ''} ${student.isAbsent ? 'is-absent-roster' : ''}`;
+        item.onclick = () => switchStudent(student.name);
+
+        const badgeHtml = student.isHardware ? 
+          `<span style="background:#00b4a2; color:white; font-size:9px; padding:2px 6px; border-radius:6px; margin-left:4px;">HARDWARE</span>` : '';
+
+        const statusTagHtml = student.isAbsent ?
+          `<span class="status-tag status-tag-absent">ABSENT</span>` :
+          `<span class="status-tag">DETECTED</span>`;
+
+        item.innerHTML = `
+          <div>
+            <h5>${student.name} ${badgeHtml}</h5>
+            <p>${student.desk}</p>
+          </div>
+          <div style="text-align: right;">
+            ${statusTagHtml}
+            <p>Streak: ${student.streak} 🔥</p>
+          </div>
+        `;
+
+        container.appendChild(item);
+      });
+    }
+
+    function switchStudent(name) {
+      const found = studentsData.find(s => s.name === name);
+      if (found) {
+        activeStudent = found;
+
+        // Update UI Text
+        document.getElementById("studentName").textContent = activeStudent.name;
+        document.getElementById("ctrlStudentName").textContent = activeStudent.name;
+        document.getElementById("logStudentName").textContent = activeStudent.name;
+        document.getElementById("coasterId").textContent = activeStudent.coaster;
+        document.getElementById("deskBadge").textContent = activeStudent.desk.toUpperCase();
+        document.getElementById("detectorStatus").textContent = activeStudent.status;
+        document.getElementById("streakCount").textContent = activeStudent.streak + " In a Row 🔥";
+        document.getElementById("studentSelect").value = activeStudent.name;
+
+        // Update Absent UI state specifically for this student
+        updateAbsentUI();
+
+        // Refresh Roster Card Highlights
+        renderRoster();
+      }
+    }
+
+    // INDIVIDUAL ABSENT BUTTON TOGGLE
     function toggleAbsent() {
-      isAbsent = !isAbsent;
+      activeStudent.isAbsent = !activeStudent.isAbsent;
+      updateAbsentUI();
+      renderRoster();
+    }
+
+    function updateAbsentUI() {
       const card = document.getElementById("studentCard");
       const badge = document.getElementById("attendanceBadge");
       const btn = document.getElementById("absentBtn");
       const timer = document.getElementById("cycleTimer");
+      const mascotText = document.getElementById("mascotStatusText");
 
-      if (isAbsent) {
+      if (activeStudent.isAbsent) {
         card.classList.add("is-absent");
         badge.textContent = "💤 Absent / Standby";
         badge.className = "status-badge badge-absent";
         btn.textContent = "☀️ Mark as Present";
         timer.textContent = "PAUSED";
+        mascotText.textContent = "HydroBot: Coaster Paused (Absent)";
       } else {
         card.classList.remove("is-absent");
         badge.textContent = "● Normal Hydrated State";
         badge.className = "status-badge";
         btn.textContent = "💤 Mark as Absent";
-        timer.textContent = "04:42";
+        timer.textContent = "04:47";
+        mascotText.textContent = "HydroBot: Next Drink in 04:47!";
       }
     }
 
     function testAlarm() {
-      if (isAbsent) return;
-      alert("Testing 10-Minute Reminder Alarm!");
+      if (activeStudent.isAbsent) return;
+      alert(`Testing 10-Minute Reminder Alarm for ${activeStudent.name}!`);
     }
 
     function simulateLift() {
-      if (isAbsent) return;
-      document.getElementById("detectorStatus").textContent = "NOT DETECTED 🚫";
+      if (activeStudent.isAbsent) return;
+      activeStudent.status = "NOT DETECTED 🚫";
+      document.getElementById("detectorStatus").textContent = activeStudent.status;
+      renderRoster();
     }
 
     function simulateReturn() {
-      if (isAbsent) return;
-      streak++;
-      document.getElementById("detectorStatus").textContent = "DETECTED 🍾";
-      document.getElementById("streakCount").textContent = streak + " In a Row 🔥";
+      if (activeStudent.isAbsent) return;
+      activeStudent.streak++;
+      activeStudent.status = "DETECTED 🍾";
+      document.getElementById("detectorStatus").textContent = activeStudent.status;
+      document.getElementById("streakCount").textContent = activeStudent.streak + " In a Row 🔥";
       document.getElementById("lastDrink").textContent = "Just Now";
+      renderRoster();
     }
 
     function forceFailed() {
-      if (isAbsent) return;
-      alert("Hydration response window expired (FAILED).");
+      if (activeStudent.isAbsent) return;
+      alert(`Hydration response window expired for ${activeStudent.name} (FAILED).`);
     }
 
-    function switchStudent(name) {
-      document.getElementById("studentName").textContent = name;
-      document.getElementById("ctrlStudentName").textContent = name;
-      document.getElementById("logStudentName").textContent = name;
-    }
+    // Initialize layout on load
+    renderRoster();
   </script>
 </body>
 </html>
