@@ -6,7 +6,6 @@
   <title>HydroApp Teacher Hub - HydroSip</title>
   
   <style>
-    /* ========== BASE & LAYOUT STYLES ========== */
     :root {
       --primary: #0d9488;
       --primary-dark: #0f766e;
@@ -16,9 +15,6 @@
       --text: #1e293b;
       --text-muted: #64748b;
       --border: #e2e8f0;
-      --red: #ef4444;
-      --green: #22c55e;
-      --amber: #f59e0b;
     }
 
     * {
@@ -35,7 +31,6 @@
       padding-bottom: 40px;
     }
 
-    /* ========== HEADER ========== */
     header {
       background: var(--card-bg);
       border-bottom: 1px solid var(--border);
@@ -79,7 +74,6 @@
       outline: none;
     }
 
-    /* ========== INFO BANNER ========== */
     .info-banner {
       max-width: 1200px;
       margin: 1.5rem auto 0;
@@ -127,7 +121,6 @@
       font-size: 0.85rem;
     }
 
-    /* ========== MAIN GRID ========== */
     main {
       max-width: 1200px;
       margin: 1.5rem auto;
@@ -143,7 +136,6 @@
       }
     }
 
-    /* ========== DASHBOARD CARDS ========== */
     .card {
       background: var(--card-bg);
       border: 1px solid var(--border);
@@ -154,7 +146,7 @@
       transition: all 0.3s ease;
     }
 
-    /* ABSENT MODE STYLING FOR STUDENT CARD */
+    /* ABSENT MODE STYLING */
     .card.is-absent {
       opacity: 0.55;
       background-color: #f3f4f6 !important;
@@ -230,7 +222,6 @@
       margin-top: 4px;
     }
 
-    /* TIMERS BAR */
     .timer-card {
       display: flex;
       align-items: center;
@@ -269,7 +260,6 @@
       font-family: monospace;
     }
 
-    /* CONTROLS */
     .controls-grid {
       display: flex;
       gap: 0.75rem;
@@ -305,6 +295,7 @@
       background: #cbd5e1;
     }
 
+    /* ABSENT BUTTON */
     .btn-absent {
       background: #ffffff;
       border: 1px solid #9ca3af;
@@ -316,7 +307,6 @@
       border-color: #4b5563;
     }
 
-    /* TABLE LOG */
     table {
       width: 100%;
       border-collapse: collapse;
@@ -336,7 +326,6 @@
       font-weight: 600;
     }
 
-    /* CLASSMATE ROSTER */
     .roster-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
@@ -369,7 +358,6 @@
       color: var(--text-muted);
     }
 
-    /* QR CARD */
     .qr-card {
       text-align: center;
     }
@@ -382,7 +370,7 @@
 </head>
 <body>
 
-  <!-- ========== HEADER ========== -->
+  <!-- HEADER -->
   <header>
     <div class="brand">
       <div class="brand-icon">💧</div>
@@ -403,7 +391,7 @@
     </div>
   </header>
 
-  <!-- ========== INFO BANNER ========== -->
+  <!-- INFO BANNER -->
   <section class="info-banner">
     <div class="info-card">
       <div class="icon">🔌</div>
@@ -419,13 +407,10 @@
     </div>
   </section>
 
-  <!-- ========== MAIN DASHBOARD ========== -->
+  <!-- MAIN CONTENT -->
   <main>
-    
-    <!-- LEFT COLUMN: ACTIVE STUDENT DASHBOARD -->
     <section>
-      
-      <!-- STUDENT STATUS CARD -->
+      <!-- STUDENT CARD -->
       <div class="card" id="studentCard">
         <div class="card-header-bar">
           <span class="desk-tag">Desk 01 • Hardware Prototype</span>
@@ -453,7 +438,7 @@
         </div>
       </div>
 
-      <!-- TIMER 1: NEXT REMINDER -->
+      <!-- TIMER 1 -->
       <div class="timer-card">
         <div class="timer-info">
           <span>⏳</span>
@@ -465,7 +450,7 @@
         <span class="timer-countdown" id="cycleTimer">10:00</span>
       </div>
 
-      <!-- TIMER 2: BUZZER RESPONSE WINDOW -->
+      <!-- TIMER 2 -->
       <div class="timer-card" style="background: #fff7ed; border-color: #ffedd5;">
         <div class="timer-info">
           <span>⏰</span>
@@ -477,7 +462,7 @@
         <span class="timer-countdown" style="color: #c2410c;" id="windowTimer">05:00</span>
       </div>
 
-      <!-- CONTROLS & ABSENT BUTTON -->
+      <!-- CONTROLS + ABSENT BUTTON -->
       <div class="card">
         <h3>⚙️ Water Bottle Detector Controls for <span id="ctrlStudentName">Ava</span></h3>
         <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">
@@ -491,7 +476,7 @@
         </div>
       </div>
 
-      <!-- ACTIVITY LOG TABLE -->
+      <!-- ACTIVITY LOG -->
       <div class="card">
         <h3>📊 Activity Log for <span id="logStudentName">Ava</span></h3>
         <table>
@@ -521,10 +506,8 @@
       </div>
     </section>
 
-    <!-- RIGHT COLUMN: CLASSMATE ROSTER & QR CODE -->
+    <!-- RIGHT SIDEBAR -->
     <section>
-      
-      <!-- ROSTER CARD -->
       <div class="card">
         <div class="card-header-bar">
           <h3>Classmate Roster</h3>
@@ -532,12 +515,9 @@
         </div>
         <p style="font-size: 0.8rem; color: var(--text-muted);">Click any student to view details</p>
 
-        <div class="roster-grid" id="rosterGrid">
-          <!-- Dynamically populated by JS -->
-        </div>
+        <div class="roster-grid" id="rosterGrid"></div>
       </div>
 
-      <!-- QR CODE CARD -->
       <div class="card qr-card">
         <h4>Teacher Dashboard QR</h4>
         <div>
@@ -545,14 +525,11 @@
         </div>
         <p style="font-size: 0.8rem; color: var(--text-muted);">https://ava141014.github.io/HydroSip/</p>
       </div>
-
     </section>
-
   </main>
 
-  <!-- ========== JAVASCRIPT LOGIC ========== -->
+  <!-- JAVASCRIPT -->
   <script>
-    // ========== STUDENT DATA ROSTER ==========
     const studentsData = [
       { name: "Ava", desk: "Desk 01", coaster: "AVA-HYDRO-01", streak: 4, status: "DETECTED 🍾", isAbsent: false },
       { name: "Liam", desk: "Desk 02", coaster: "HYDRO-02", streak: 3, status: "DETECTED 🍾", isAbsent: false },
@@ -579,7 +556,6 @@
     let activeStudent = studentsData[0];
     let streakCounter = 4;
 
-    // Render Classmate Roster Grid
     function renderRoster() {
       const rosterContainer = document.getElementById("rosterGrid");
       rosterContainer.innerHTML = "";
@@ -588,15 +564,11 @@
         const item = document.createElement("div");
         item.className = "roster-item";
         item.onclick = () => switchStudent(student.name);
-        item.innerHTML = `
-          <p>${student.name}</p>
-          <p>${student.desk}</p>
-        `;
+        item.innerHTML = `<p>${student.name}</p><p>${student.desk}</p>`;
         rosterContainer.appendChild(item);
       });
     }
 
-    // Switch Selected Student
     function switchStudent(name) {
       const found = studentsData.find(s => s.name === name);
       if (found) {
@@ -608,18 +580,15 @@
         document.getElementById("detectorStatus").textContent = activeStudent.status;
         document.getElementById("streakCount").textContent = activeStudent.streak + " In a Row 🔥";
         document.getElementById("studentSelect").value = activeStudent.name;
-
-        // Apply absent state if applicable
         updateAbsentUI();
       }
     }
 
-    // ========== MARK ABSENT TOGGLE LOGIC ==========
+    // ABSENT BUTTON TOGGLE
     function toggleStudentAbsent() {
       activeStudent.isAbsent = !activeStudent.isAbsent;
       updateAbsentUI();
 
-      // Log event
       const now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
       addLogEntry(now, activeStudent.name, "ATTENDANCE", 
         activeStudent.isAbsent ? "Marked ABSENT. Timers paused." : "Marked PRESENT. Timers resumed.");
@@ -632,4 +601,19 @@
       const cycleTimer = document.getElementById("cycleTimer");
 
       if (activeStudent.isAbsent) {
-        card.classList.add("
+        card.classList.add("is-absent");
+        badge.textContent = "💤 Absent / Standby";
+        badge.className = "status-badge badge-absent";
+        btn.textContent = "☀️ Mark as Present";
+        cycleTimer.textContent = "PAUSED";
+      } else {
+        card.classList.remove("is-absent");
+        badge.textContent = "● Normal Hydrated State";
+        badge.className = "status-badge badge-active";
+        btn.textContent = "💤 Mark as Absent";
+        cycleTimer.textContent = "10:00";
+      }
+    }
+
+    function simulateBottleLift() {
+      if (active
