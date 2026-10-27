@@ -180,7 +180,7 @@
       gap: 24px;
     }
 
-    /* SVG WATER DROPLET MASCOT CONTAINER */
+    /* SVG WATER DROP MASCOT */
     .mascot-container {
       display: flex;
       flex-direction: column;
@@ -426,7 +426,7 @@
         </div>
 
         <div class="student-body">
-          <!-- SVG WATER DROPLET MASCOT -->
+          <!-- SVG WATER DROP MASCOT -->
           <div class="mascot-container">
             <svg class="mascot-svg" viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg">
               <path d="M50 10 C50 10 90 60 90 85 A40 40 0 0 1 10 85 C10 60 50 10 50 10 Z" fill="#38bdf8" />
@@ -489,7 +489,7 @@
           <button class="btn-ctrl btn-gray" onclick="simulateReturn()">🍾 Return Bottle (DETECTED)</button>
           <button class="btn-ctrl btn-red" onclick="forceFailed()">⚠️ Force FAILED (5 Min Expired)</button>
           
-          <!-- 💤 ABSENT BUTTON -->
+          <!-- ABSENT BUTTON -->
           <button class="btn-ctrl btn-absent" id="absentBtn" onclick="toggleAbsent()">💤 Mark as Absent</button>
         </div>
       </div>
@@ -524,20 +524,18 @@
 
     <!-- RIGHT SIDEBAR ROSTER & QR -->
     <section>
-      <!-- ROSTER CARD -->
       <div class="card">
         <div class="roster-header">
           <h4>Classmate Roster</h4>
-          <span style="font-size: 12px; background: #e6f7f5; color: #007a6e; padding: 2px 8px; border-radius: 10px; font-weight: 700;">20 Active</span>
+          <span id="activeCountBadge" style="font-size: 12px; background: #e6f7f5; color: #007a6e; padding: 2px 8px; border-radius: 10px; font-weight: 700;">20 Active</span>
         </div>
         <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 12px;">Click any student to view details</p>
 
         <div class="roster-list" id="rosterList">
-          <!-- Dynamically generated roster list -->
+          <!-- Dynamically populated roster list -->
         </div>
       </div>
 
-      <!-- QR CARD -->
       <div class="card qr-box">
         <h4>Teacher Dashboard QR</h4>
         <img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https://ava141014.github.io/HydroSip/&color=00897b&bgcolor=ffffff" alt="QR Code">
@@ -548,7 +546,7 @@
 
   <!-- JAVASCRIPT -->
   <script>
-    // STUDENT DATA ROSTER WITH INDIVIDUAL ABSENT TRACKING
+    // INDIVIDUAL STUDENT DATA ARRAY
     const studentsData = [
       { name: "Ava", desk: "DESK 01 (HARDWARE PROTOTYPE)", coaster: "AVA-HYDRO-01", streak: 4, status: "DETECTED 🍾", isAbsent: false, isHardware: true },
       { name: "Nyla", desk: "Desk 02", coaster: "HYDRO-02", streak: 3, status: "DETECTED 🍾", isAbsent: false, isHardware: false },
@@ -563,11 +561,16 @@
 
     let activeStudent = studentsData[0];
 
+    // RENDER RIGHT SIDEBAR ROSTER
     function renderRoster() {
       const container = document.getElementById("rosterList");
       container.innerHTML = "";
 
+      let activeCount = 0;
+
       studentsData.forEach(student => {
+        if (!student.isAbsent) activeCount++;
+
         const item = document.createElement("div");
         item.className = `roster-card ${student.name === activeStudent.name ? 'active' : ''} ${student.isAbsent ? 'is-absent-roster' : ''}`;
         item.onclick = () => switchStudent(student.name);
@@ -592,14 +595,17 @@
 
         container.appendChild(item);
       });
+
+      document.getElementById("activeCountBadge").textContent = `${activeCount} Active`;
     }
 
+    // SWITCH CURRENTLY SELECTED STUDENT
     function switchStudent(name) {
       const found = studentsData.find(s => s.name === name);
       if (found) {
         activeStudent = found;
 
-        // Update UI Text
+        // Update Text Elements
         document.getElementById("studentName").textContent = activeStudent.name;
         document.getElementById("ctrlStudentName").textContent = activeStudent.name;
         document.getElementById("logStudentName").textContent = activeStudent.name;
@@ -609,21 +615,22 @@
         document.getElementById("streakCount").textContent = activeStudent.streak + " In a Row 🔥";
         document.getElementById("studentSelect").value = activeStudent.name;
 
-        // Update Absent UI state specifically for this student
+        // Load that specific student's absent status
         updateAbsentUI();
 
-        // Refresh Roster Card Highlights
+        // Refresh Roster selection highlights
         renderRoster();
       }
     }
 
-    // INDIVIDUAL ABSENT BUTTON TOGGLE
+    // TOGGLE ABSENT STATUS FOR CURRENT ACTIVE STUDENT
     function toggleAbsent() {
       activeStudent.isAbsent = !activeStudent.isAbsent;
       updateAbsentUI();
       renderRoster();
     }
 
+    // UPDATE UI BASED ON ACTIVE STUDENT'S ABSENT STATE
     function updateAbsentUI() {
       const card = document.getElementById("studentCard");
       const badge = document.getElementById("attendanceBadge");
@@ -675,7 +682,7 @@
       alert(`Hydration response window expired for ${activeStudent.name} (FAILED).`);
     }
 
-    // Initialize layout on load
+    // INITIAL LOAD
     renderRoster();
   </script>
 </body>
